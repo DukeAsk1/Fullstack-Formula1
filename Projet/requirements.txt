@@ -1,0 +1,8 @@
+flask
+pymongo
+numpy
+pandas
+scrapy
+plotly
+bs4
+requests
