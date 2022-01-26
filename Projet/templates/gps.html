@@ -1,0 +1,34 @@
+
+<!doctype html>
+<title>Grand Prix</title>
+<h1>Grand Prix</h1>
+
+
+{% if name==None %}
+  <ol>
+    {% for duc in cur %}
+    <li><a href="/gps/{{duc}}">{{ duc }}</a></li>
+    {% endfor %}
+  </ol>
+{% else %}
+  {% if year==None %}
+  <h1>{{name}}</h1>
+  
+  {% for duc in races %}
+  <div><a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}</div>
+  {% endfor %}
+  
+
+
+
+  {% else %}
+  <h1>{{name}} {{year}}</h1>
+  {% endif %}
+{% endif %}
+
+
+<form action="/">
+  <button type="submit">
+    Home
+  </button>
+</form>

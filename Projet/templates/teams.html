@@ -1,0 +1,95 @@
+
+<!doctype html>
+<title>Teams</title>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+{% if name==None %}
+  <ol>
+    {% for duc in cur %}
+    <li><a href="/teams/{{duc}}">{{ duc }}</a></li>
+    {% endfor %}
+  </ol>
+{% else %}
+  <h1>{{name}}</h1>
+  <h3>Histogram showing number of points per year</h3>
+  <div id="myPlot"></div>
+  <script>
+    Plotly.newPlot('myPlot',{{ fig | safe }})
+  </script>
+
+
+<h3>Average position per year</h3>
+<table>
+  <thead>
+    <tr>
+      <th colspan="1">Year</th>
+      <th colspan="1">Average Position</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for duc in rank %}
+      <tr>
+        <td>{{duc['_id']}}</td>
+        <td>{{duc['Average Position']}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Best Pitstop time</h3>
+<table>
+  <thead>
+    <tr>
+      <th colspan="1">Grand Prix</th>
+      <th colspan="1">Year</th>
+      <th colspan="1">Pitstop time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for duc in pit_time %}
+      <tr>
+        <td>{{duc['Grand_Prix']}}</td>
+        <td>{{duc['Year']}}</td>
+        <td>{{duc['Time_Pit']}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+  <h3>Participations</h3>  
+  <table>
+    <thead>
+      <tr>
+          <th colspan="1">Grand_Prix</th>
+          <th colspan="1">Year</th>
+          <th colspan="1">Driver</th>
+          <th colspan="1">Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for duc in par %}
+        <tr>
+            <td>{{duc["Grand_Prix"]}}</td>
+            <td>{{duc["Year"]}}</td>
+            <td>{{duc["Driver"]}}</td>
+            <td>{{duc["Position"]}}</td>
+        </tr>
+      {% endfor %} 
+    </tbody>
+  </table>
+{% endif %}
+
+
+
+<form action="/">
+    <button name="home" type="submit">
+      Home
+    </button>
+</form>

@@ -68,9 +68,10 @@ def insert_value_db():
     df_pitstop['title']=split_gp
     df_pitstop = df_pitstop.rename(columns={'title':'Grand_Prix','Date':'Year'})
 
-
+    df_race["Year"] = df_race['Year'].astype("int")
     df_race["Avg_Speed"] = df_race['Avg_Speed'].astype("float64")
     df_race['Points'] = df_race['Points'].astype("float64")
+    df_race['Pos_Qualif'] = pd.to_numeric(df_race['Pos_Qualif'],errors="coerce")
     df_race['Position'] = pd.to_numeric(df_race['Position'],errors="coerce")
     df_race['Lap_Time'] = "0" + df_race['Lap_Time'].astype(str)
     df_race['Q1'] = "0" + df_race['Q1'].astype(str)
