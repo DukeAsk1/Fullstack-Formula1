@@ -1,0 +1,50 @@
+
+<!doctype html>
+<html>
+  <body style="background-color:rgb(201, 196, 200);">
+    <head>
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom.css') }}">
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+
+
+    <title>Grand Prix</title>
+    <h1>Grand Prix</h1>
+
+
+    {% if name==None %}
+    <h1 align="CENTER">Grand Prix List</h1>
+    <div class="column_center" align='CENTER'>
+        {% for duc in cur %}
+        <button class="button_simple"><a href="/gps/{{duc}}">{{ duc }}</a></button>
+        {% endfor %}
+        <br><br><br><br><br>
+    </div>
+    {% else %}
+      {% if year==None %}
+      <h1>{{name}}</h1>
+      
+      {% for duc in races %}
+      <div><a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}</div>
+      {% endfor %}
+      
+
+
+
+      {% else %}
+      <h1>{{name}} {{year}}</h1>
+      {% endif %}
+    {% endif %}
+
+
+    <form action="/">
+      <button type="submit" class='button_home'>
+        Home
+      </button>
+    </form>
+  </body>
+
+</html>

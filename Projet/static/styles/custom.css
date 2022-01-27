@@ -1,0 +1,142 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20 janv. 2022, 07:59:47
+    Author     : dduon
+*/
+
+/* Three image containers (use 25% for four, and 50% for two, etc) */
+.column_2 {
+  float: left;
+  width: 49%;
+  padding: 5px;
+}
+
+.column_3 {
+  float: left;
+  width: 32%;
+  padding: 5px;
+}
+
+.column_4 {
+  float: left;
+  width: 25%;
+  padding: 5px;
+}
+.column_center{
+  text-align:center;
+  margin-left: auto;
+  margin-right: auto;
+  width:70%;
+  padding: 5px;
+}
+
+.button_simple{
+  background-color: #7369a0;
+  border: 2px solid black;
+  border-radius: 8px;
+  color: white;
+  padding: 25px 60px;
+  margin-bottom:5px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+
+.button_simple:hover{
+  background-color: white; /* Green */
+  color: black;
+  border: 1px solid black;
+}
+
+.button_cart {
+  background-color: #b91212; /* Red */
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 15px 100px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+
+.button_cart:hover{
+  background-color: white; /* Green */
+  color: black;
+  border: 1px solid black;
+}
+
+
+.button_home {
+  background-color: #b91212; /* Red */
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+
+.button_home:hover{
+  background-color: white; /* Green */
+  color: black;
+  border: 1px solid black;
+}
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  float: center;
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}

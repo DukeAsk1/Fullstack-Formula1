@@ -18,7 +18,7 @@ def insert_value_db():
         print("data_s/pit_stop.json not found")
         quit()
     try:
-        df_qualif = pd.read_json("data_s/qualif.json")
+        df_qualif_before = pd.read_json("data_s/qualif.json")
     except:
         print("data_s/qualif.json not found")
         quit()
@@ -37,14 +37,48 @@ def insert_value_db():
     except:
         print("data_s/tyres.json not found")
         quit()
+    
+    try:
+        df_qualif_2021_no_sprint = pd.read_json("data_s/qualif_2021_no_sprint.json")
+    except:
+        print("data_s/qualif_2021_no_sprint.json not found")
+        quit()
+    try:
+       df_qualif_2021_sprint = pd.read_json("data_s/qualif_2021_sprint.json")
+    except:
+        print("data_s/qualif_2021_sprint.json not found")
+        quit()
 
 
     df_fastest = pd.concat([df_fastest_a, df_fastest_b], axis=0)
 
+    df_qualif = pd.concat([df_qualif_before,df_qualif_2021_sprint,df_qualif_2021_no_sprint],axis=0)
 
     df_qualif = df_qualif.rename(columns={'Position':'Pos_Qualif'})
     df_fastest = df_fastest.rename(columns={'Position':'Speed_Rank','Time':'Lap_Time'})
     df_pitstop = df_pitstop.rename(columns={'Time':'Time_Pit','Laps':'Lap_pit'})
+
+    df_fastest_spa = df_fastest[(df_fastest['title']=='Yas Marina Circuit, Yas Island') & (df_fastest['Date']=="2021")]
+    df_fastest_spa['title'] = df_fastest_spa['title'].str.replace('Yas Marina Circuit, Yas Island',"Circuit de Spa-Francorchamps, Spa-Francorchamps")
+    df_fastest_spa["Speed_Rank"] = df_fastest_spa["Speed_Rank"].astype(str)
+    df_fastest_spa["Lap_Time"] = df_fastest_spa["Lap_Time"].astype(str)
+    df_fastest_spa["Avg_Speed"] = df_fastest_spa["Avg_Speed"].astype(str)
+    df_fastest_spa['Date'] = df_fastest_spa['Date'].astype(str)
+
+    for val in df_fastest_spa["Speed_Rank"]:
+        df_fastest_spa["Speed_Rank"] = df_fastest_spa["Speed_Rank"].str.replace(val,"NaN")
+
+    for val in df_fastest_spa["Lap_Time"]:
+        df_fastest_spa["Lap_Time"] = df_fastest_spa["Lap_Time"].str.replace(val,"NaN")
+
+    for val in df_fastest_spa["Avg_Speed"]:
+        df_fastest_spa["Avg_Speed"] = df_fastest_spa["Avg_Speed"].str.replace(val,"NaN")
+
+    df_fastest_spa["Date"] = df_fastest_spa["Date"].str.replace("2021","2021-08-29")
+
+    df_fastest = pd.concat([df_fastest, df_fastest_spa], axis=0)
+
+
     df1 = pd.merge(df_race_result, df_fastest,  how='right', left_on=['title','Date','Number','Driver','Team'], right_on = ['title','Date','Number','Driver','Team']).fillna("NaN")
     df_race = pd.merge(df1, df_qualif,  how='right', left_on=['title','Date','Number','Driver','Team'], right_on = ['title','Date','Number','Driver','Team']).fillna('NaN')
 
@@ -73,6 +107,7 @@ def insert_value_db():
     df_race['Points'] = df_race['Points'].astype("float64")
     df_race['Position'] = pd.to_numeric(df_race['Position'],errors="coerce")
     df_race['Lap_Time'] = "0" + df_race['Lap_Time'].astype(str)
+    df_race["Pos_Qualif"] = pd.to_numeric(df_race['Pos_Qualif'],errors="coerce")
     df_race['Q1'] = "0" + df_race['Q1'].astype(str)
     df_race['Q2'] = "0" + df_race['Q2'].astype(str)
     df_race['Q3'] = "0" + df_race['Q3'].astype(str)
@@ -128,8 +163,9 @@ def insert_value_db():
 
 
     df_pitstop['Num_stop'] = df_pitstop['Num_stop'].astype("float64")
-    df_pitstop["Time_Pit"] = df_pitstop['Time_Pit'].astype("float64",errors="ignore")
-
+    #df_pitstop["Time_Pit"] = df_pitstop['Time_Pit'].astype("float64",errors="ignore")
+    df_pitstop = df_pitstop[~df_pitstop['Time_Pit'].str.contains(":",na=False)]
+    df_pitstop['Time_Pit'] = df_pitstop['Time_Pit'].astype("float64")
 
     df_tyres = df_tyres.rename(columns={'title':'Year','GP':'Grand_Prix'})
     split_year = df_tyres['Year'].str.split(" ",n=2).str[2]
@@ -150,6 +186,25 @@ def insert_value_db():
     df_tyres['Grand_Prix'] = df_tyres['Grand_Prix'].str.replace("Netherlands","Zandvoort")
     df_tyres['Grand_Prix'] = df_tyres['Grand_Prix'].str.replace("Korea","South Korea")
     df_tyres['Grand_Prix'] = df_tyres['Grand_Prix'].str.replace("Saudi Arabia","Jeddah")
+
+
+    df_fastest_spa = df_fastest[(df_fastest['title']=='Yas Marina Circuit, Yas Island') & (df_fastest['Date']=="2021")]
+    df_fastest_spa['title'] = df_fastest_spa['title'].str.replace('Yas Marina Circuit, Yas Island',"Circuit de Spa-Francorchamps, Spa-Francorchamps")
+    df_fastest_spa["Speed_Rank"] = df_fastest_spa["Speed_Rank"].astype(str)
+    df_fastest_spa["Lap_Time"] = df_fastest_spa["Lap_Time"].astype(str)
+    df_fastest_spa["Avg_Speed"] = df_fastest_spa["Avg_Speed"].astype(str)
+
+    for val in df_fastest_spa["Speed_Rank"]:
+        df_fastest_spa["Speed_Rank"] = df_fastest_spa["Speed_Rank"].str.replace(val,"NaN")
+
+    for val in df_fastest_spa["Lap_Time"]:
+        df_fastest_spa["Lap_Time"] = df_fastest_spa["Lap_Time"].str.replace(val,"NaN")
+
+    for val in df_fastest_spa["Avg_Speed"]:
+        df_fastest_spa["Avg_Speed"] = df_fastest_spa["Avg_Speed"].str.replace(val,"NaN")
+
+
+    df_fastest = pd.concat([df_fastest, df_fastest_spa], axis=0)
 
 
 
