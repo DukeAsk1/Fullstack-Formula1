@@ -9,9 +9,12 @@ import pandas as pd
 import json
 import plotly
 
+<<<<<<< HEAD
 from data_scrap import scrap
 from insert_db import insert_value_db
 
+=======
+>>>>>>> 01245e796b5eaf003c55d3c81708bc84e8035dc5
 @app.route('/')
 def index():
      return render_template('hello.html')
@@ -167,8 +170,11 @@ def show_race(name,year):
      return render_template('gps.html',cur=cur,name=name, year=year)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
      #scrap()
      #insert_value_db()
+=======
+>>>>>>> 01245e796b5eaf003c55d3c81708bc84e8035dc5
      client = pymongo.MongoClient()
      database = client['projet_f']
      app.run(debug=True, port=2747) 
