@@ -75,6 +75,7 @@ def insert_value_db():
         df_fastest_spa["Avg_Speed"] = df_fastest_spa["Avg_Speed"].str.replace(val,"NaN")
 
     df_fastest_spa["Date"] = df_fastest_spa["Date"].str.replace("2021","2021-08-29")
+    df_fastest_spa["Date"] = pd.to_datetime(df_fastest_spa['Date'], format='%Y-%m-%d', errors='coerce')
 
     df_fastest = pd.concat([df_fastest, df_fastest_spa], axis=0)
 

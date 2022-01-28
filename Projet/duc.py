@@ -8,13 +8,13 @@ import plotly_express as px
 import pandas as pd
 import json
 import plotly
-
-<<<<<<< HEAD
 from data_scrap import scrap
 from insert_db import insert_value_db
 
-=======
->>>>>>> 01245e796b5eaf003c55d3c81708bc84e8035dc5
+@app.errorhandler(404)
+def not_found(e):
+  return render_template("404.html")
+
 @app.route('/')
 def index():
      return render_template('hello.html')
@@ -28,10 +28,19 @@ def show_drivers():
 @app.route('/drivers/<name>',methods=['GET'])
 def show_driver_stats(name):
      collection = database['Race']
+     l = collection.aggregate([
+          {"$match":{"Driver":name}}
+     ])
+
+     if len(list(l))==0:
+          return render_template('404.html')
+          
      par = collection.aggregate([
           {"$match":{"Driver":name}},
           {"$sort":{"Year":1,"Grand_Prix":1}}
      ])
+
+
      dnf_year = collection.aggregate([
           {"$match":{"Gap_Time":"DNF","Driver":name}},
           {"$group": {"_id":"$Year","Number of DNF":{"$sum":1}}},
@@ -118,10 +127,18 @@ def show_teams():
 @app.route('/teams/<name>',methods=['GET'])
 def show_team_stats(name):
      collection = database['Race']
+     l = collection.aggregate([
+          {"$match":{"Team":name}}
+     ])
+     if len(list(l))==0:
+          return render_template('404.html')
      par = collection.aggregate([
           {"$match":{"Team":name}},
           {"$sort":{"Year":1,"Grand_Prix":1,"Driver":1}}
      ])
+
+     if len(list(par))==0:
+          return render_template('404.html')
 
      rank = collection.aggregate([
           {"$match":{"Team":name}},
@@ -156,25 +173,106 @@ def show_gps():
 @app.route('/gps/<name>',methods=['GET'])
 def show_gp_stats(name):
      collection = database['Race']
+     l = collection.aggregate([
+          {"$match":{"Grand_Prix":name}}
+     ])
+     if len(list(l))==0:
+          return render_template('404.html')
+
+     winners = collection.aggregate([
+          {"$match":{"Grand_Prix":name,"Position":1}},
+          {"$group": {"_id":{"Driver":"$Driver"},"Number of wins":{"$sum":1}}},
+          {"$sort":{"Number of win":-1}},
+          #{"$limit":20}
+     ])
+
+     dnf_year = collection.aggregate([
+          {"$match":{"Grand_Prix":name,"Gap_Time":"DNF"}},
+          {"$group": {"_id":"$Year","Number of DNF":{"$sum":1}}},
+          {"$sort":{"_id":1}},
+     ])
+
+     dnf_driver = collection.aggregate([
+          {"$match":{"Grand_Prix":name,"Gap_Time":"DNF"}},
+          {"$group": {"_id":"$Driver","Number of DNF":{"$sum":1}}},
+          {"$sort":{"Number of DNF":-1}},
+          {"$limit":10}
+     ])  
+
+     fast_gp = collection.aggregate([
+          {"$match":{"Grand_Prix":name}},
+          {"$project": {"_id":{"Driver":"$Driver","Year":"$Year"},
+                         "Best Lap Time":{
+                              "$dateFromString":{
+                                   "dateString":"$Lap_Time",
+                                   "format":"%M:%S.%LZ",
+                                   "onError": '$Lap_Time',
+                                   "onNull":"DNF"}
+          }}},
+          {"$sort":{"Best Lap Time":1}},
+          {"$limit":5}
+     ])
+
+     fast_qual = collection.aggregate([
+          {"$match":{"Grand_Prix":name}},
+          {"$project": {"_id":{"Driver":"$Driver","Year":"$Year"},
+                         "Best Qualifying Time":{
+                              "$dateFromString":{
+                                   "dateString":"$Q3",
+                                   "format":"%M:%S.%LZ",
+                                   "onError": '$Q3',
+                                   "onNull":"DNF"}
+          }}},
+          {"$sort":{"Best Qualifying Time":1}},
+          {"$limit":5}
+     ])
+
+     tyres = database['Tyres'].aggregate([
+          {"$match":{"Grand_Prix":name}},
+          {"$group":{"_id":"$Tyres","Number of sets":{"$sum":1}}},
+          {"$sort":{"Number of sets":-1}}
+     ])
+
+     best = collection.aggregate([
+          {"$match":{"Grand_Prix":name,"Position":1}},
+          #{"$group":{"_id":"$Year","Time Checkered Flag":{"$avg":"Lap_Time"}}},
+          {"$project": {"_id":{"Year":"$Year"},
+                    "Time Checkered Flag":{
+                         "$dateFromString":{
+                              "dateString":"$Lap_Time",
+                              "format":"%M:%S.%LZ",
+                              "onError": '$Lap_Time',
+                              "onNull":"DNF"}
+          }}},
+          {"$sort":{"_id":1}}
+     ])
      races = collection.aggregate([
           {"$match":{"Grand_Prix":name}},
           {"$group":{"_id":"$Year"}},
           {"$sort":{"_id":1}}
      ])
-     return render_template('gps.html',races=races,name=name,year=None)
+
+     return render_template('gps.html',races=races,name=name,year=None,winners=winners,dnf_year=dnf_year,dnf_driver=dnf_driver,fast_gp=fast_gp,fast_qual=fast_qual,
+                         tyres=tyres,best=best)
 
 @app.route('/gps/<name>/<year>',methods=['GET'])
 def show_race(name,year):
      collection = database['Race']
-     cur = collection.aggregate([{"$match":{"Grand_Prix":name}}])
+     l = collection.aggregate([
+          {"$match":{"Grand_Prix":name,"Year":int(year)}}
+     ])
+     if len(list(l))==0:
+          return render_template('404.html')
+     cur = collection.aggregate([
+          {"$match":{"Grand_Prix":name,"Year":int(year)}},
+          {"$sort":{"Laps":-1,"Position":1}}
+     ])
+
      return render_template('gps.html',cur=cur,name=name, year=year)
 
 if __name__ == '__main__':
-<<<<<<< HEAD
      #scrap()
      #insert_value_db()
-=======
->>>>>>> 01245e796b5eaf003c55d3c81708bc84e8035dc5
      client = pymongo.MongoClient()
      database = client['projet_f']
      app.run(debug=True, port=2747) 

@@ -1,8 +1,8 @@
 
 <!doctype html>
-<<<<<<< HEAD
 <html>
   <body style="background-color:rgb(201, 196, 200);">
+    <title>F1 Data · Grand Prix</title>
     <head>
       <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom.css') }}">
       <meta charset="UTF-8">
@@ -11,8 +11,6 @@
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     </head>
 
-
-    <title>Grand Prix</title>
     <h1>Grand Prix</h1>
 
 
@@ -28,8 +26,139 @@
       {% if year==None %}
       <h1>{{name}}</h1>
       
+      <h3>Winners List</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Driver</th>
+            <th colspan="1">Number of wins</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in winners %}
+            <tr>
+              <td>{{duc['_id']['Driver']}}</td>
+              <td>{{duc['Number of wins']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Number of DNFs per year</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Year</th>
+            <th colspan="1">DNFs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in dnf_year %}
+            <tr>
+              <td>{{duc['_id']}}</td>
+              <td>{{duc['Number of DNF']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Drivers with the most DNFs</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Drivers</th>
+            <th colspan="1">DNFs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in dnf_driver %}
+            <tr>
+              <td>{{duc['_id']}}</td>
+              <td>{{duc['Number of DNF']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Fastest laps in Grand Prix</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Year</th>
+            <th colspan="1">Driver</th>
+            <th colspan="1">Lap time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in fast_gp %}
+            <tr>
+              <td>{{duc['_id']['Year']}}</td>
+              <td>{{duc['_id']['Driver']}}</td>
+              <td>{{duc['Best Lap Time']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Fastest laps in Qualifying Session</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Year</th>
+            <th colspan="1">Driver</th>
+            <th colspan="1">Lap time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in fast_qual %}
+            <tr>
+              <td>{{duc['_id']['Year']}}</td>
+              <td>{{duc['_id']['Driver']}}</td>
+              <td>{{duc['Best Qualifying Time']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Tyres used</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Tyres</th>
+            <th colspan="1">Number of sets</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in tyres %}
+            <tr>
+              <td>{{duc['_id']}}</td>
+              <td>{{duc['Number of sets']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Best time each year</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Year</th>
+            <th colspan="1">Lap Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in best %}
+            <tr>
+              <td>{{duc['_id']['Year']}}</td>
+              <td>{{duc['Time Checkered Flag']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Check races:</h3>
       {% for duc in races %}
-      <div><a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}</div>
+      <a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}
       {% endfor %}
       
 
@@ -37,6 +166,41 @@
 
       {% else %}
       <h1>{{name}} {{year}}</h1>
+      <h3>Ranking</h3>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="1">Position</th>
+            <th colspan="1">Number</th>
+            <th colspan="1">Driver</th>
+            <th colspan="1">Team</th>
+            <th colspan="1">Laps</th>
+            <th colspan="1">Gap time</th>
+            <th colspan="1">Lap time</th>
+            <th colspan="1">Average Speed</th>
+            <th colspan="1">Q1</th>
+            <th colspan="1">Q2</th>
+            <th colspan="1">Q3</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for duc in cur %}
+            <tr>
+              <td>{{duc['Position']}}</td>
+              <td>{{duc['Number']}}</td>
+              <td>{{duc['Driver']}}</td>
+              <td>{{duc['Team']}}</td>
+              <td>{{duc['Laps']}}</td>
+              <td>{{duc['Gap_Time']}}</td>
+              <td>{{duc['Lap_Time']}}</td>
+              <td>{{duc['Avg_Speed']}}</td>
+              <td>{{duc['Q1']}}</td>
+              <td>{{duc['Q2']}}</td>
+              <td>{{duc['Q3']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
       {% endif %}
     {% endif %}
 
@@ -49,37 +213,3 @@
   </body>
 
 </html>
-=======
-<title>Grand Prix</title>
-<h1>Grand Prix</h1>
-
-
-{% if name==None %}
-  <ol>
-    {% for duc in cur %}
-    <li><a href="/gps/{{duc}}">{{ duc }}</a></li>
-    {% endfor %}
-  </ol>
-{% else %}
-  {% if year==None %}
-  <h1>{{name}}</h1>
-  
-  {% for duc in races %}
-  <div><a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}</div>
-  {% endfor %}
-  
-
-
-
-  {% else %}
-  <h1>{{name}} {{year}}</h1>
-  {% endif %}
-{% endif %}
-
-
-<form action="/">
-  <button type="submit">
-    Home
-  </button>
-</form>
->>>>>>> 01245e796b5eaf003c55d3c81708bc84e8035dc5

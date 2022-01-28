@@ -1,9 +1,8 @@
 
 <!doctype html>
-<<<<<<< HEAD
 <html>
   <body style="background-color:rgb(201, 196, 200);">
-    <title>Teams</title>
+    <title>F1 Data · Teams</title>
 
     <head>
       <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/custom.css') }}">
@@ -96,104 +95,9 @@
 
 
     <form action="/">
-        <button name="home" type="submit" class='button_home'>
+        <button type="submit" class='button_home'>
           Home
         </button>
     </form>
   </body>
 </html>
-=======
-<title>Teams</title>
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-</head>
-
-{% if name==None %}
-  <ol>
-    {% for duc in cur %}
-    <li><a href="/teams/{{duc}}">{{ duc }}</a></li>
-    {% endfor %}
-  </ol>
-{% else %}
-  <h1>{{name}}</h1>
-  <h3>Histogram showing number of points per year</h3>
-  <div id="myPlot"></div>
-  <script>
-    Plotly.newPlot('myPlot',{{ fig | safe }})
-  </script>
-
-
-<h3>Average position per year</h3>
-<table>
-  <thead>
-    <tr>
-      <th colspan="1">Year</th>
-      <th colspan="1">Average Position</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for duc in rank %}
-      <tr>
-        <td>{{duc['_id']}}</td>
-        <td>{{duc['Average Position']}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<h3>Best Pitstop time</h3>
-<table>
-  <thead>
-    <tr>
-      <th colspan="1">Grand Prix</th>
-      <th colspan="1">Year</th>
-      <th colspan="1">Pitstop time</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for duc in pit_time %}
-      <tr>
-        <td>{{duc['Grand_Prix']}}</td>
-        <td>{{duc['Year']}}</td>
-        <td>{{duc['Time_Pit']}}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-
-  <h3>Participations</h3>  
-  <table>
-    <thead>
-      <tr>
-          <th colspan="1">Grand_Prix</th>
-          <th colspan="1">Year</th>
-          <th colspan="1">Driver</th>
-          <th colspan="1">Position</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for duc in par %}
-        <tr>
-            <td>{{duc["Grand_Prix"]}}</td>
-            <td>{{duc["Year"]}}</td>
-            <td>{{duc["Driver"]}}</td>
-            <td>{{duc["Position"]}}</td>
-        </tr>
-      {% endfor %} 
-    </tbody>
-  </table>
-{% endif %}
-
-
-
-<form action="/">
-    <button name="home" type="submit">
-      Home
-    </button>
-</form>
->>>>>>> 01245e796b5eaf003c55d3c81708bc84e8035dc5
