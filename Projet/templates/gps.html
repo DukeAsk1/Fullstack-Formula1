@@ -158,16 +158,16 @@
 
       <h3>Check races:</h3>
       {% for duc in races %}
-      <a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}
+      <a href="/gps/{{name}}/{{duc['_id']}}">{{duc['_id']}}</a>
       {% endfor %}
-      
+      <br><br><br><br>
 
 
 
       {% else %}
       <h1>{{name}} {{year}}</h1>
-      <h3>Ranking</h3>
-      <table>
+      <h2 align="CENTER">Ranking</h2>
+      <table align='CENTER'>
         <thead>
           <tr>
             <th colspan="1">Position</th>
@@ -201,15 +201,20 @@
           {% endfor %}
         </tbody>
       </table>
+      <br><br><br><br>
       {% endif %}
     {% endif %}
 
 
-    <form action="/">
-      <button type="submit" class='button_home'>
-        Home
-      </button>
-    </form>
+    <div id='frm'>
+      <form action="/">
+        <button type="submit" class='button_home'>
+          Home
+        </button>
+      </form>
+      <button onclick="history.back()" class="button_home">Go Back</button>
+    </div>
   </body>
+
 
 </html>

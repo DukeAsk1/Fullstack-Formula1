@@ -29,75 +29,82 @@
         Plotly.newPlot('myPlot',{{ fig | safe }})
       </script>
 
-
-    <h3>Average position per year</h3>
-    <table>
-      <thead>
-        <tr>
-          <th colspan="1">Year</th>
-          <th colspan="1">Average Position</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for duc in rank %}
-          <tr>
-            <td>{{duc['_id']}}</td>
-            <td>{{duc['Average Position']}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-    <h3>Best Pitstop time</h3>
-    <table>
-      <thead>
-        <tr>
-          <th colspan="1">Grand Prix</th>
-          <th colspan="1">Year</th>
-          <th colspan="1">Pitstop time</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for duc in pit_time %}
-          <tr>
-            <td>{{duc['Grand_Prix']}}</td>
-            <td>{{duc['Year']}}</td>
-            <td>{{duc['Time_Pit']}}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-
-      <h3>Participations</h3>  
-      <table>
-        <thead>
-          <tr>
-              <th colspan="1">Grand_Prix</th>
-              <th colspan="1">Year</th>
-              <th colspan="1">Driver</th>
-              <th colspan="1">Position</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in par %}
+    <div clas='row' align="CENTER">
+      <div class='column_3'>
+        <h3>Average position per year</h3>
+        <table>
+          <thead>
             <tr>
-                <td>{{duc["Grand_Prix"]}}</td>
-                <td>{{duc["Year"]}}</td>
-                <td>{{duc["Driver"]}}</td>
-                <td>{{duc["Position"]}}</td>
+              <th colspan="1">Year</th>
+              <th colspan="1">Average Position</th>
             </tr>
-          {% endfor %} 
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for duc in rank %}
+              <tr>
+                <td>{{duc['_id']}}</td>
+                <td>{{duc['Average Position']}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="column_3">
+        <h3>Best Pitstop time</h3>
+        <table>
+          <thead>
+            <tr>
+              <th colspan="1">Grand Prix</th>
+              <th colspan="1">Year</th>
+              <th colspan="1">Pitstop time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for duc in pit_time %}
+              <tr>
+                <td>{{duc['Grand_Prix']}}</td>
+                <td>{{duc['Year']}}</td>
+                <td>{{duc['Time_Pit']}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class='column_3'>
+        <h3>Participations</h3>  
+        <table>
+          <thead>
+            <tr>
+                <th colspan="1">Grand_Prix</th>
+                <th colspan="1">Year</th>
+                <th colspan="1">Driver</th>
+                <th colspan="1">Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for duc in par %}
+              <tr>
+                  <td>{{duc["Grand_Prix"]}}</td>
+                  <td>{{duc["Year"]}}</td>
+                  <td>{{duc["Driver"]}}</td>
+                  <td>{{duc["Position"]}}</td>
+              </tr>
+            {% endfor %} 
+          </tbody>
+        </table>
+      </div>
+    </div>
     {% endif %}
 
 
 
-    <form action="/">
+    <div id='frm'>
+      <form action="/">
         <button type="submit" class='button_home'>
           Home
         </button>
-    </form>
+      </form>
+      <button onclick="history.back()" class="button_home">Go Back</button>
+    </div>
   </body>
 </html>

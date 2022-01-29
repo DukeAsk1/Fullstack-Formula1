@@ -29,3 +29,4 @@ class ArticleItem(scrapy.Item):
     Q3 = scrapy.Field()
     Year = scrapy.Field()
     Avg_Speed = scrapy.Field()
+    Nationality = scrapy.Field()

@@ -1,4 +1,5 @@
 from ast import Name
+#from nis import match
 from flask import Flask
 app = Flask(__name__)  
 import pymongo
@@ -8,6 +9,7 @@ import plotly_express as px
 import pandas as pd
 import json
 import plotly
+
 from data_scrap import scrap
 from insert_db import insert_value_db
 
@@ -28,6 +30,7 @@ def show_drivers():
 @app.route('/drivers/<name>',methods=['GET'])
 def show_driver_stats(name):
      collection = database['Race']
+     driver = database['Driver']
      l = collection.aggregate([
           {"$match":{"Driver":name}}
      ])
@@ -45,19 +48,19 @@ def show_driver_stats(name):
           {"$match":{"Gap_Time":"DNF","Driver":name}},
           {"$group": {"_id":"$Year","Number of DNF":{"$sum":1}}},
           {"$sort":{"_id":1}},
-          {"$limit":20}
+          {"$limit":10}
      ])
      dnf_gp = collection.aggregate([
           {"$match":{"Gap_Time":"DNF","Driver":name}},
           {"$group": {"_id":"$Grand_Prix","Number of DNF":{"$sum":1}}},
           {"$sort":{"Number of DNF":-1}},
-          {"$limit":20}
+          {"$limit":10}
      ])
      pos_year = collection.aggregate([
           {"$match":{"Driver":name}},
           {"$group": {"_id":"$Year","Rank Averaged Position":{"$avg":"$Position"}}},
           {"$sort":{"_id":1}},
-          #{"$limit":20}
+          {"$limit":10}
      ])
      pos_gp = collection.aggregate([
           {"$match":{"Driver":name}},
@@ -65,6 +68,10 @@ def show_driver_stats(name):
           {"$sort":{"Rank Averaged Position":1}},
           #{"$limit":5}
      ])
+
+     wins = len(list(collection.aggregate([
+          {"$match":{"Driver":name,"Position":1}}
+     ])))
 
      win_year = collection.aggregate([
           {"$match":{"Driver":name,"Position":1}},
@@ -84,6 +91,10 @@ def show_driver_stats(name):
           {"$sort":{"_id":1}},
           #{"$limit":10}
      ])
+
+     pols = len(list(collection.aggregate([
+          {"$match":{"Driver":name,"Pos_Qualif":1}}
+     ])))
 
      pol_gp = collection.aggregate([
           {"$match":{"Driver":name,"Pos_Qualif":1}},
@@ -105,17 +116,17 @@ def show_driver_stats(name):
           {"$limit":10}
      ])
 
-     data = pd.DataFrame(list(collection.aggregate([
+     data = pd.DataFrame(list(driver.aggregate([
           {"$match":{"Driver":name}},
-          {"$group": {"_id":"$Year","Total Points":{"$sum":"$Points"}}},
-          {"$sort":{"_id":1}},
+          {"$group": {"_id":"$Year","Season Standing":{"$avg":"$Season_Standing"},"Total Points":{"$avg":"$Points"}}},
+          {"$sort":{"_id":1}}
           #{"$limit":20}
      ])))
      data = data.rename(columns={"_id":"Year"})
-     graph = px.line(data,y="Total Points",x="Year")
+     graph = px.line(data,y="Total Points",x="Year",hover_data=["Year","Season Standing","Total Points"])
      fig = json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder)
-     return render_template('drivers.html',name=name, fig=fig, par=par, dnf_year=dnf_year, dnf_gp=dnf_gp, pos_year=pos_year, pos_gp=pos_gp, 
-                         win_year=win_year, win_gp=win_gp, pol_year=pol_year, pol_gp=pol_gp, avg_qpos=avg_qpos, speed=speed)
+     return render_template('drivers.html',name=name, fig=fig, par=par, dnf_year=dnf_year, dnf_gp=dnf_gp, pos_year=pos_year, pos_gp=pos_gp, wins=wins,
+                         win_year=win_year, win_gp=win_gp, pols=pols, pol_year=pol_year, pol_gp=pol_gp, avg_qpos=avg_qpos, speed=speed)
 
 
 @app.route('/teams',methods=['GET'])
@@ -127,6 +138,7 @@ def show_teams():
 @app.route('/teams/<name>',methods=['GET'])
 def show_team_stats(name):
      collection = database['Race']
+     team = database['Team']
      l = collection.aggregate([
           {"$match":{"Team":name}}
      ])
@@ -153,14 +165,14 @@ def show_team_stats(name):
           {"$limit":10}
      ])
 
-     data = pd.DataFrame(list(collection.aggregate([
+     data = pd.DataFrame(list(team.aggregate([
           {"$match":{"Team":name}},
-          {"$group": {"_id":"$Year","Total Points":{"$sum":"$Points"}}},
+          {"$group": {"_id":"$Year","Season Standing":{"$avg":"$Season_Standing"},"Total Points":{"$avg":"$Points"}}},
           {"$sort":{"_id":1}},
           #{"$limit":20}
      ])))
      data = data.rename(columns={"_id":"Year"})
-     graph = px.line(data,y="Total Points",x="Year")
+     graph = px.line(data,y="Total Points",x="Year",hover_data=["Year","Season Standing","Total Points"])
      fig = json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder)
      return render_template('teams.html',fig=fig,par=par,name=name,rank=rank,pit_time=pit_time)
 
@@ -190,6 +202,7 @@ def show_gp_stats(name):
           {"$match":{"Grand_Prix":name,"Gap_Time":"DNF"}},
           {"$group": {"_id":"$Year","Number of DNF":{"$sum":1}}},
           {"$sort":{"_id":1}},
+          {"$limit":8}
      ])
 
      dnf_driver = collection.aggregate([
@@ -272,7 +285,7 @@ def show_race(name,year):
 
 if __name__ == '__main__':
      #scrap()
-     #insert_value_db()
+     insert_value_db()
      client = pymongo.MongoClient()
      database = client['projet_f']
      app.run(debug=True, port=2747) 

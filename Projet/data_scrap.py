@@ -10,6 +10,8 @@ def scrap():
         os.remove("data_s/pit_stop.json")
         os.remove("data_s/qualif_2021_no_sprint.json")
         os.remove("data_s/qualif_2021_sprint.json")
+        os.remove("data_s/standings_driver.json")
+        os.remove("data_s/standings_team.json")
 
     except:
         print("Pas de fichiers au préalable à supprimer")
@@ -22,3 +24,5 @@ def scrap():
     os.system("scrapy crawl pit_stop -o data_s/pit_stop.json")
     os.system("scrapy crawl qualif_2021_sprint -o data_s/qualif_2021_sprint.json")
     os.system("scrapy crawl qualif_2021_no_sprint -o data_s/qualif_2021_no_sprint.json")
+    os.system("scrapy crawl standings_driver -o data_s/standings_driver.json")
+    os.system("scrapy crawl standings_team -o data_s/standings_team.json")

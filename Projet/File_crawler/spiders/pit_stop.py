@@ -12,10 +12,9 @@ class F1Spider(scrapy.Spider):
         title = response.css('title::text').extract_first()
         all_links = {
             name:response.urljoin(url) for name, url in zip(
-            response.css(".resultsarchive-filter-container").css(".resultsarchive-filter-wrap")[0].css(".resultsarchive-filter-item")[1:12].css("span::text").extract(),
-            response.css(".resultsarchive-filter-container").css(".resultsarchive-filter-wrap")[0].css(".resultsarchive-filter-item")[1:12].css("a::attr(href)").extract())
+            response.css(".resultsarchive-filter-container").css(".resultsarchive-filter-wrap")[0].css(".resultsarchive-filter-item")[1:11].css("span::text").extract(),
+            response.css(".resultsarchive-filter-container").css(".resultsarchive-filter-wrap")[0].css(".resultsarchive-filter-item")[1:11].css("a::attr(href)").extract())
         }
-
         for link in all_links.values():
             yield Request(link, callback=self.parse_gp)
 

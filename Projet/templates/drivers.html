@@ -24,226 +24,259 @@
         <br><br><br><br><br>
       </div>
     {% else %}
-      <h1>{{name}}</h1>
-      <h3>Histogram showing number of points per year</h3>
+      <h1 align="CENTER">{{name}}</h1>
+      <h2 align="CENTER">Histogram showing number of points per year</h2>
       <div id="myPlot"></div>
       <script>
         Plotly.newPlot('myPlot',{{ fig | safe }})
       </script>
         
-
-      <h3>Number of DNFs per year</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">DNFs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in dnf_year %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of DNF']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-
-      <h3>Number of DNFs per Grand Prix</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Grand Prix</th>
-            <th colspan="1">DNFs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in dnf_gp %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of DNF']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      
-      <h3>Average rank per year</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">Rank Averaged Position</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in pos_year %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Rank Averaged Position']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h3>Average rank per Grand Prix</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Grand Prix</th>
-            <th colspan="1">Averaged Position</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in pos_gp %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Rank Averaged Position']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Number of wins per Year</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">Wins</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in win_year %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of wins']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Number of wins per Grand Prix</h3>
-      {% if wins==0 %}
-      {{name}} has not won yet
-      {% endif %}
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Grand Prix</th>
-            <th colspan="1">Wins</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in win_gp %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of wins']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Number of Pole Positions per year</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">Number of Pole Positions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in pol_year %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of Pole Positions']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Number of Pole Positions per Grand Prix</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Grand Prix</th>
-            <th colspan="1">Number of Pole Positions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in pol_gp %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of Pole Positions']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Best Average qualifying position</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Grand Prix</th>
-            <th colspan="1">Average Qualifying position</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in avg_qpos %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Averaged Qualifying Position']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Top 10 highest speed averaged reach</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Grand Prix</th>
-            <th colspan="1">Year</th>
-            <th colspan="1">Speed Max Averaged</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in speed %}
-            <tr>
-              <td>{{duc['Grand_Prix']}}</td>
-              <td>{{duc['Year']}}</td>
-              <td>{{duc['Avg_Speed']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>  
-
-      <h3>Participations</h3>
-      <table>
-        <thead>
-          <tr>
-              <th colspan="1">Grand_Prix</th>
-              <th colspan="1">Year</th>
-              <th colspan="1">Position</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in par %}
-            <tr>
-                <td>{{duc["Grand_Prix"]}}</td>
-                <td>{{duc["Year"]}}</td>
-                <td>{{duc["Position"]}}</td>
-            </tr>
-          {% endfor %} 
-        </tbody>
-      </table>
+      <div class="row" align="CENTER">
+        <div class="column_3">
+          <h2>Number of DNFs per year</h2>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Year</th>
+                <th colspan="1">DNFs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in dnf_year %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Number of DNF']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="column_3">
+          <h2>Number of DNFs per Grand Prix</h2>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Grand Prix</th>
+                <th colspan="1">DNFs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in dnf_gp %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Number of DNF']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="column_3">       
+          <h2>Average rank per year</h2>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Year</th>
+                <th colspan="1">Rank Averaged Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in pos_year %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Rank Averaged Position']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>    
+      </div>
+      <div class='row' align="CENTER">
+        <div class='column_3'>
+          <h3>Average rank per Grand Prix</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Grand Prix</th>
+                <th colspan="1">Averaged Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in pos_gp %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Rank Averaged Position']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table> 
+        </div>
+        <div class="column_3">
+          <h3>Number of wins per Year</h3>
+          {% if wins==0 %}
+            {{name}} has yet to win a Grand Prix
+          {% else %}
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="1">Year</th>
+                  <th colspan="1">Wins</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for duc in win_year %}
+                  <tr>
+                    <td>{{duc['_id']}}</td>
+                    <td>{{duc['Number of wins']}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {%endif%}  
+        </div>
+        <div class="column_3">
+          <h3>Number of wins per Grand Prix</h3>
+          {% if wins==0 %}
+            {{name}} has yet to win a Grand Prix
+          {% else %}
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="1">Grand Prix</th>
+                  <th colspan="1">Wins</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for duc in win_gp %}
+                  <tr>
+                    <td>{{duc['_id']}}</td>
+                    <td>{{duc['Number of wins']}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        </div>  
+      </div>
+      <div class="row" align="CENTER">
+        <div class="column_3">
+          <h3>Number of Pole Positions per year</h3>
+          {% if pols==0 %}
+            {{name}} has yet to qualify 1st
+          {%else%}
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="1">Year</th>
+                  <th colspan="1">Number of Pole Positions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for duc in pol_year %}
+                  <tr>
+                    <td>{{duc['_id']}}</td>
+                    <td>{{duc['Number of Pole Positions']}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>  
+          {%endif%}
+        </div>
+        <div class="column_3">
+          <h3>Number of Pole Positions per Grand Prix</h3>
+          {% if pols==0 %}
+            {{name}} has yet to qualify 1st
+          {%else%}
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="1">Grand Prix</th>
+                  <th colspan="1">Number of Pole Positions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for duc in pol_gp %}
+                  <tr>
+                    <td>{{duc['_id']}}</td>
+                    <td>{{duc['Number of Pole Positions']}}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table> 
+          {% endif %} 
+        </div>
+        <div class="column_3">
+          <h3>Best Average qualifying position</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Grand Prix</th>
+                <th colspan="1">Average Qualifying position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in avg_qpos %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Averaged Qualifying Position']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table> 
+        </div>
+      </div> 
+      <div class='row' align="CENTER">
+        <div class='column_3'>
+          <h3>Top 10 highest speed averaged reach</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Grand Prix</th>
+                <th colspan="1">Year</th>
+                <th colspan="1">Speed Max Averaged</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in speed %}
+                <tr>
+                  <td>{{duc['Grand_Prix']}}</td>
+                  <td>{{duc['Year']}}</td>
+                  <td>{{duc['Avg_Speed']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table> 
+        </div>
+        <div class='column_3'> 
+          <h3>Participations</h3>
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="1">Grand_Prix</th>
+                  <th colspan="1">Year</th>
+                  <th colspan="1">Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in par %}
+                <tr>
+                    <td>{{duc["Grand_Prix"]}}</td>
+                    <td>{{duc["Year"]}}</td>
+                    <td>{{duc["Position"]}}</td>
+                </tr>
+              {% endfor %} 
+            </tbody>
+          </table>
+        </div>
+      </div>
     {% endif %}
 
-
-    <form action="/">
-      <button type="submit" class='button_home'>
-        Home
-      </button>
-    </form>
+    <div id='frm'>
+      <form action="/">
+        <button type="submit" class='button_home'>
+          Home
+        </button>
+      </form>
+      <button onclick="history.back()" class="button_home">Go Back</button>
+    </div>
   </body>
 </html>
