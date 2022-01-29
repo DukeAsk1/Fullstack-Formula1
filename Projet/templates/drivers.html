@@ -26,10 +26,11 @@
     {% else %}
       <h1 align="CENTER">{{name}}</h1>
       <h2 align="CENTER">Histogram showing number of points per year</h2>
-      <div id="myPlot"></div>
-      <script>
-        Plotly.newPlot('myPlot',{{ fig | safe }})
-      </script>
+      <div id="myPlot">
+        <script>
+          Plotly.newPlot('myPlot',{{ fig | safe }})
+        </script>
+      </div>
         
       <div class="row" align="CENTER">
         <div class="column_3">
@@ -182,7 +183,7 @@
           {%endif%}
         </div>
         <div class="column_3">
-          <h3>Number of Pole Positions per Grand Prix</h3>
+          <h3>Most Pole Positions per Grand Prix</h3>
           {% if pols==0 %}
             {{name}} has yet to qualify 1st
           {%else%}
@@ -247,7 +248,7 @@
           </table> 
         </div>
         <div class='column_3'> 
-          <h3>Participations</h3>
+          <h3>Most Recent Grand Prix attended in the year</h3>
           <table>
             <thead>
               <tr>
@@ -268,6 +269,7 @@
           </table>
         </div>
       </div>
+      <br><br><br><br>
     {% endif %}
 
     <div id='frm'>

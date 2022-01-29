@@ -40,7 +40,8 @@ def show_driver_stats(name):
           
      par = collection.aggregate([
           {"$match":{"Driver":name}},
-          {"$sort":{"Year":1,"Grand_Prix":1}}
+          {"$sort":{"Year":-1}},
+          {"$limit":10}
      ])
 
 
@@ -100,7 +101,7 @@ def show_driver_stats(name):
           {"$match":{"Driver":name,"Pos_Qualif":1}},
           {"$group": {"_id":"$Grand_Prix","Number of Pole Positions":{"$sum": 1}}},
           {"$sort":{"Number of Pole Positions":-1}},
-          #{"$limit":10}
+          {"$limit":10}
      ])
 
      avg_qpos = collection.aggregate([
@@ -118,7 +119,7 @@ def show_driver_stats(name):
 
      data = pd.DataFrame(list(driver.aggregate([
           {"$match":{"Driver":name}},
-          {"$group": {"_id":"$Year","Season Standing":{"$avg":"$Season_Standing"},"Total Points":{"$avg":"$Points"}}},
+          {"$group": {"_id":"$Year","Season Standing":{"$sum":"$Season_Standing"},"Total Points":{"$avg":"$Points"}}},
           {"$sort":{"_id":1}}
           #{"$limit":20}
      ])))
@@ -146,11 +147,19 @@ def show_team_stats(name):
           return render_template('404.html')
      par = collection.aggregate([
           {"$match":{"Team":name}},
-          {"$sort":{"Year":1,"Grand_Prix":1,"Driver":1}}
+          {"$group":{"_id":{"Year":"$Year"}}},
+          {"$sort":{"Year":1}}
      ])
 
      if len(list(par))==0:
           return render_template('404.html')
+     
+     dnf_driver = collection.aggregate([
+          {"$match":{"Team":name,"Gap_Time":"DNF"}},
+          {"$group": {"_id":"$Driver","Number of DNF":{"$sum":1}}},
+          {"$sort":{"_id":-1}},
+          {"$limit":10}
+     ]) 
 
      rank = collection.aggregate([
           {"$match":{"Team":name}},
@@ -174,7 +183,7 @@ def show_team_stats(name):
      data = data.rename(columns={"_id":"Year"})
      graph = px.line(data,y="Total Points",x="Year",hover_data=["Year","Season Standing","Total Points"])
      fig = json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder)
-     return render_template('teams.html',fig=fig,par=par,name=name,rank=rank,pit_time=pit_time)
+     return render_template('teams.html',fig=fig,par=par,name=name,rank=rank,pit_time=pit_time,dnf_driver=dnf_driver)
 
 @app.route('/gps',methods=['GET'])
 def show_gps():
@@ -240,32 +249,40 @@ def show_gp_stats(name):
           {"$limit":5}
      ])
 
-     tyres = database['Tyres'].aggregate([
+     nat_year = collection.aggregate([])
+
+     tyres = pd.DataFrame(list(database['Tyres'].aggregate([
           {"$match":{"Grand_Prix":name}},
           {"$group":{"_id":"$Tyres","Number of sets":{"$sum":1}}},
           {"$sort":{"Number of sets":-1}}
-     ])
+     ])))
+     tyres = tyres.rename(columns={"_id":"Tyres"})
+     graph_tyres = px.pie(tyres,values="Number of sets",names="Tyres", title="Most frequent tyres used the Grand Prix")
+     fig_tyres = json.dumps(graph_tyres, cls=plotly.utils.PlotlyJSONEncoder)
 
-     best = collection.aggregate([
+     best = pd.DataFrame(list(collection.aggregate([
           {"$match":{"Grand_Prix":name,"Position":1}},
           #{"$group":{"_id":"$Year","Time Checkered Flag":{"$avg":"Lap_Time"}}},
-          {"$project": {"_id":{"Year":"$Year"},
+          {"$project": {"_id":"$Year",
                     "Time Checkered Flag":{
                          "$dateFromString":{
-                              "dateString":"$Lap_Time",
-                              "format":"%M:%S.%LZ",
-                              "onError": '$Lap_Time',
+                              "dateString":"$Gap_Time",
+                              "format":"%H:%M:%S.%LZ",
+                              "onError": '$Gap_Time',
                               "onNull":"DNF"}
           }}},
           {"$sort":{"_id":1}}
-     ])
+     ])))
+     best = best.rename(columns={"_id":"Year"})
+     graph = px.bar(best,y="Year",x="Time Checkered Flag")
+     fig = json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder)
      races = collection.aggregate([
           {"$match":{"Grand_Prix":name}},
           {"$group":{"_id":"$Year"}},
           {"$sort":{"_id":1}}
      ])
 
-     return render_template('gps.html',races=races,name=name,year=None,winners=winners,dnf_year=dnf_year,dnf_driver=dnf_driver,fast_gp=fast_gp,fast_qual=fast_qual,
+     return render_template('gps.html',fig=fig,fig_tyres = fig_tyres,races=races,name=name,year=None,winners=winners,dnf_year=dnf_year,dnf_driver=dnf_driver,fast_gp=fast_gp,fast_qual=fast_qual,
                          tyres=tyres,best=best)
 
 @app.route('/gps/<name>/<year>',methods=['GET'])

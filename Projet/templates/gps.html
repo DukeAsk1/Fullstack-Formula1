@@ -25,136 +25,128 @@
     {% else %}
       {% if year==None %}
       <h1>{{name}}</h1>
-      
-      <h3>Winners List</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Driver</th>
-            <th colspan="1">Number of wins</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in winners %}
-            <tr>
-              <td>{{duc['_id']['Driver']}}</td>
-              <td>{{duc['Number of wins']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h3>Number of DNFs per year</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">DNFs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in dnf_year %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of DNF']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h3>Drivers with the most DNFs</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Drivers</th>
-            <th colspan="1">DNFs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in dnf_driver %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of DNF']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h3>Fastest laps in Grand Prix</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">Driver</th>
-            <th colspan="1">Lap time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in fast_gp %}
-            <tr>
-              <td>{{duc['_id']['Year']}}</td>
-              <td>{{duc['_id']['Driver']}}</td>
-              <td>{{duc['Best Lap Time']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h3>Fastest laps in Qualifying Session</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">Driver</th>
-            <th colspan="1">Lap time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in fast_qual %}
-            <tr>
-              <td>{{duc['_id']['Year']}}</td>
-              <td>{{duc['_id']['Driver']}}</td>
-              <td>{{duc['Best Qualifying Time']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h3>Tyres used</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Tyres</th>
-            <th colspan="1">Number of sets</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in tyres %}
-            <tr>
-              <td>{{duc['_id']}}</td>
-              <td>{{duc['Number of sets']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
 
       <h3>Best time each year</h3>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="1">Year</th>
-            <th colspan="1">Lap Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for duc in best %}
-            <tr>
-              <td>{{duc['_id']['Year']}}</td>
-              <td>{{duc['Time Checkered Flag']}}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div id="myPlot">
+        <script>
+          Plotly.newPlot('myPlot',{{ fig | safe }})
+        </script>
+      </div>
+
+      <div class='row' align="CENTER">    
+        <div class='column_3'>
+          <h3>Winners List</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Driver</th>
+                <th colspan="1">Number of wins</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in winners %}
+                <tr>
+                  <td>{{duc['_id']['Driver']}}</td>
+                  <td>{{duc['Number of wins']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>  
+        <div class='column_3'>
+          <h3>Number of DNFs per year</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Year</th>
+                <th colspan="1">DNFs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in dnf_year %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Number of DNF']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="column_3">
+          <h3>Drivers with the most DNFs</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Drivers</th>
+                <th colspan="1">DNFs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in dnf_driver %}
+                <tr>
+                  <td>{{duc['_id']}}</td>
+                  <td>{{duc['Number of DNF']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row" align="CENTER">
+        <div class="column_3">
+          <h3>Fastest laps in Grand Prix</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Year</th>
+                <th colspan="1">Driver</th>
+                <th colspan="1">Lap time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in fast_gp %}
+                <tr>
+                  <td>{{duc['_id']['Year']}}</td>
+                  <td>{{duc['_id']['Driver']}}</td>
+                  <td>{{duc['Best Lap Time']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="column_3">
+          <h3>Fastest laps in Qualifying Session</h3>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="1">Year</th>
+                <th colspan="1">Driver</th>
+                <th colspan="1">Lap time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for duc in fast_qual %}
+                <tr>
+                  <td>{{duc['_id']['Year']}}</td>
+                  <td>{{duc['_id']['Driver']}}</td>
+                  <td>{{duc['Best Qualifying Time']}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <h3>Tyres used</h3>
+      <div id="my_tyres_Plot">
+        <script>
+          Plotly.newPlot('my_tyres_Plot',{{ fig_tyres | safe }})
+        </script>
+      </div>
+
+      
+
+      
 
       <h3>Check races:</h3>
       {% for duc in races %}
