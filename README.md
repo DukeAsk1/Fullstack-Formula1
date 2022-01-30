@@ -71,6 +71,8 @@ Vérifiez tout d'abord si vous disposez de la bonne version de Python. Pour cela
 - dans l'invite de commandes tapez `python --version`
 - vérifiez si la version est à jour, de préférence la version `3.9.7`
 
+Une autre application que vous devez également avoir est [`Docker`](https://www.docker.com/get-started), permettant de vous fournir la même version que nous avons développés et la sureté du bon fonctionnement. Assurez également d'avoir installé [`WSL 2`](https://docs.microsoft.com/fr-fr/windows/wsl/install) permettant une couche de compatibilité entre les éxecutables Linux et le système Windows.
+
 Certains packages seront également nécessaires à installer pour la bonne utilisation du dash si cela n'est pas déjà fait :
 - ouvrir l'invite de commandes et se rendre dans le dossier du projet
 - Tapez la commande `pip install -r requirements.txt` pour installer les packages nécessaires.
