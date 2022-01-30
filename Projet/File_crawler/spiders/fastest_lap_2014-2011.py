@@ -7,8 +7,11 @@ class F1Spider(scrapy.Spider):
     allowed_domains = ["www.formula1.com"]
     start_urls = ['https://www.formula1.com/en/results.html/2021/races.html']
 
+    # def parse():
+    #   permet de donner le lien de chaque année d'information étudiée    
+    #   
+
     def parse(self, response):
-        title = response.css('title::text').extract_first()
         all_links = {
             name:response.urljoin(url) for name, url in zip(
             response.css(".resultsarchive-filter-container").css(".resultsarchive-filter-wrap")[0].css(".resultsarchive-filter-item")[9:11].css("span::text").extract(),
@@ -17,8 +20,11 @@ class F1Spider(scrapy.Spider):
         for link in all_links.values():
             yield Request(link, callback=self.parse_gp)
 
+    # def parse_gp():
+    #   permet de donner le lien de chaque Grand Prix     
+    #   
+
     def parse_gp(self, response):
-        #title = response.css('title::text').extract_first()
         all_links = {
             name:response.urljoin(url) for name, url in zip(
             response.css(".resultsarchive-filter-container").css(".resultsarchive-filter-wrap")[2].css(".resultsarchive-filter-item")[1:].css("span::text").extract(),
@@ -27,8 +33,10 @@ class F1Spider(scrapy.Spider):
         for link in all_links.values():
             yield Request(link, callback=self.parse_fastest)
 
+    # def parse_fastest():
+    #   va dans la liste et va chercher l'onglet fastest
+
     def parse_fastest(self, response):
-        title = response.css(".resultsarchive-side-nav").css(".side-nav-item")[2].css("a::text").extract()
         all_links = {
             name:response.urljoin(url) for name, url in zip(
             response.css(".resultsarchive-side-nav").css(".side-nav-item")[2].css("a::text").extract(),
@@ -36,12 +44,15 @@ class F1Spider(scrapy.Spider):
         }
         for link in all_links.values():
             yield Request(link, callback=self.parse_category)
+
+    # def parse_category():
+    #   scrappe les informations données par les classes cherchées
+    # retourne une liste d'item
        
     def parse_category(self, response):
         title = self.clean_spaces(response.css(".circuit-info").css("span::text").extract_first())
         Date = self.clean_spaces(response.css(".full-date").css("span::text").extract_first())
         for article in response.css(".resultsarchive-table").css("tbody").css("tr"):
-            #Info = article.css("tr").css(" td::text").extract()
             Position = article.css(".dark").css("td::text").extract_first()
             Number = article.css(".dark.hide-for-mobile").css("td::text").extract_first()
             Driver = article.css(".hide-for-mobile").css("span::text").extract_first()
@@ -64,8 +75,3 @@ class F1Spider(scrapy.Spider):
         if string:
             return " ".join(string.split())
 
-"""  
-yield {
-            "title":title,
-            "all_links":all_links
-        }"""

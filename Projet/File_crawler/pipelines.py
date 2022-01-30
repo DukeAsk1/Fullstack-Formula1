@@ -17,13 +17,8 @@ class TextPipeline(object):
             raise DropItem("Missing title in %s" % item)
 
 
+#Permet de supprimer les espace inutiles dans le scrapping des titres et informations    
 
-
-    def modif_spe(string):
-        #new_string = unicodedata.normalize('NFKD',string).encode('ascii','ignore')
-        new_string = unidecode(string)
-        return new_string
-    
 def clean_spaces(string):
     if string:
         return " ".join(string.split())

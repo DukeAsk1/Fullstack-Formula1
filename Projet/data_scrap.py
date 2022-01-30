@@ -3,18 +3,44 @@ import os
 def scrap():
     try: 
         os.remove("data_s/race_result.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/qualif.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/tyres.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/fastest_b.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/fastest_a.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/pit_stop.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/qualif_2021_no_sprint.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/qualif_2021_sprint.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/standings_driver.json")
+    except Exception as e:
+        print(e)
+    try:
         os.remove("data_s/standings_team.json")
-
-    except:
-        print("Pas de fichiers au préalable à supprimer")
+    except Exception as e:
+        print(e)
 
     os.system("scrapy crawl f1_parse2 -o data_s/race_result.json")
     os.system("scrapy crawl qualif -o data_s/qualif.json")

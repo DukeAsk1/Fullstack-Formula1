@@ -7,6 +7,8 @@
 
 import scrapy
 
+# On définit ici tous les items nécessaires à l'exploitation des données
+
 class ArticleItem(scrapy.Item):
     title = scrapy.Field()
     Date = scrapy.Field()

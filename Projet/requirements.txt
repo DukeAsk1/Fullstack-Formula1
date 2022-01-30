@@ -3,6 +3,6 @@ pymongo
 numpy
 pandas
 scrapy
+cufflinks
 plotly
-bs4
-requests
+plotly_express

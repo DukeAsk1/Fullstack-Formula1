@@ -6,6 +6,9 @@ from datetime import datetime
 
 def insert_value_db():
 
+    # Lance les fichiers JSON stockés dans le dossier data_s/.
+    # Retourne une exception si le fichier est inexistant.
+
     try:
         df_race_result = pd.read_json("data_s/race_result.json")
     except:
@@ -59,6 +62,7 @@ def insert_value_db():
     except:
         print('data_s/standings_team.json not found')
 
+    # Traitement des dataframes 
 
     df_fastest = pd.concat([df_fastest_a, df_fastest_b], axis=0)
 
@@ -77,6 +81,10 @@ def insert_value_db():
     df_fastest_spa["Avg_Speed"] = df_fastest_spa["Avg_Speed"].astype(str)
     df_fastest_spa['Date'] = df_fastest_spa['Date'].astype(str)
 
+    # Création unique d'une dataframe Spa-2021, car c'est la seule exception de l'année
+    # Le Grand Prix a été annulé donc il n'y a pas de valeur, hormis la qualification de chaque pilote et 
+    # donc leur point attribué en fonction de ce résultat
+
     for val in df_fastest_spa["Speed_Rank"]:
         df_fastest_spa["Speed_Rank"] = df_fastest_spa["Speed_Rank"].str.replace(val,"NaN")
 
@@ -91,10 +99,12 @@ def insert_value_db():
 
     df_fastest = pd.concat([df_fastest, df_fastest_spa], axis=0)
 
+    # Merge des dataframes communes pour obtenir une dataframe orientée "Pilote"
 
     df1 = pd.merge(df_race_result, df_fastest,  how='right', left_on=['title','Date','Number','Driver','Team'], right_on = ['title','Date','Number','Driver','Team']).fillna("NaN")
     df_race = pd.merge(df1, df_qualif,  how='right', left_on=['title','Date','Number','Driver','Team'], right_on = ['title','Date','Number','Driver','Team']).fillna('NaN')
 
+    # Renommer certaines valeurs pour éviter la confusion entre deux Grand Prix sur le même circuit la même année
     df_race["Date"] = df_race['Date'].astype(str)
     split_date = df_race['Date'].str.split("-",n=1).str[0]
     df_race['title'] = df_race['title'].str.replace("Circuit de Catalunya, Spain","Catalunya, Barcelona")
@@ -115,6 +125,8 @@ def insert_value_db():
     df_pitstop['title']=split_gp
     df_pitstop = df_pitstop.rename(columns={'title':'Grand_Prix','Date':'Year'})
 
+    # Redéfinition du type de chaque colonne pour les exploiter plus tard
+
     df_race["Year"] = df_race['Year'].astype("int")
     df_race["Avg_Speed"] = df_race['Avg_Speed'].astype("float64")
     df_race['Points'] = df_race['Points'].astype("float64")
@@ -133,6 +145,8 @@ def insert_value_db():
     df_race['Q1'] = df_race['Q1'].str.replace("0DNF","DNF")
     df_race['Lap_Time'] = df_race['Lap_Time'].str.replace("0NaN","No Time")
     df_race = df_race.rename(columns={'Time':'Gap_Time'})
+
+    # Renommer les noms des Grand Prix pour avoir des similitudes entre formula1.com et f1fca.com
 
     df_race['Grand_Prix'] = df_race['Grand_Prix'].str.replace("Sakhir","Bahrain")
     df_race['Grand_Prix'] = df_race['Grand_Prix'].str.replace("Melbourne","Australia")
@@ -193,7 +207,6 @@ def insert_value_db():
 
 
     df_pitstop['Num_stop'] = df_pitstop['Num_stop'].astype("float64")
-    #df_pitstop["Time_Pit"] = df_pitstop['Time_Pit'].astype("float64",errors="ignore")
     df_pitstop = df_pitstop[~df_pitstop['Time_Pit'].str.contains(":",na=False)]
     df_pitstop['Time_Pit'] = df_pitstop['Time_Pit'].astype("float64")
 
@@ -227,6 +240,11 @@ def insert_value_db():
     df_standing_team['title'] = split_date_standing_team
     df_standing_team = df_standing_team.rename(columns={'Position':'Season_Standing',"title":"Year"})
     df_standing_team['Year'] = df_standing_team['Year'].astype("int64")
+
+    # Insert Mongo
+    # On prend le même client pour chaque collection
+    # On définit plusieurs collections car certaines ne peuvent pas se mélanger entre elles
+    # Plusieurs collections permettent de requêtes plus approfondies.  
  
 
 
@@ -290,16 +308,3 @@ def insert_value_db():
     except:
         print("Dataframe Team not found")
         quit()
-
-
-"""
-df_race_result = pd.read_json("data/race_result.json")
-    df_pitstop = pd.read_json("data/pit_stop.json")
-    df_qualif = pd.read_json("data/qualif.json")
-    df_fastest_a = pd.read_json("data/fastest_a.json")
-    df_fastest_b = pd.read_json("data/fastest_b.json")
-
-df_tyres = pd.read_json("data/tyres.json")
-
-
-"""

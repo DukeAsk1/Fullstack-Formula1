@@ -59,9 +59,7 @@ Une fois la source de notre projet extraite, allez dans le dossier `Projet` et l
 - Le dossier [`templates`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/tree/master/assets) concernant les différentes pages de notre plateforme.
 - Le dossier [`static`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/tree/master/assets) concernant les différentes images et fonctionnalités de structure de notre plateforme.
 
-Tous ces composants vont pouvoir être lancer à l'aide d'un seul fichier, le `dockerfile`. La structure entière tournera donc autour de deux fichiers principaux:
-- Le `dockerfile`, permettant de créer notre volume (environnement de travail) qui permettra de tout centraliser.
-- Et un `docker-compose.yml` appelant les différentes technologies que nous utilisons, ici `mongo` en base de données et notre fichier `main.py` comme fichier de compilation central.
+Tous ces composants de la structure entière tourneront donc autour d'un fichier principal: `docker-compose.yml`, appelant les différentes technologies que nous utilisons, ici `mongo` en base de données et notre fichier `main.py` comme fichier de compilation central.
 
 
 # USER'S GUIDE 
@@ -75,9 +73,9 @@ Vérifiez tout d'abord si vous disposez de la bonne version de Python. Pour cela
 
 Certains packages seront également nécessaires à installer pour la bonne utilisation du dash si cela n'est pas déjà fait :
 - ouvrir l'invite de commandes et se rendre dans le dossier du projet
-- tapez la commande `docker compose up`, cette commande va permettre de concevoir les containers nécessaires à la plateforme.
-
-Une fois la commande tapée pour démarrer le fichier principal `main.py`, une addresse locale va s'ouvrir dans le terminal, il ne reste plus qu"à se rendre sur cette adresse pour accéder à la plateforme. 
+- Tapez la commande `pip install -r requirements.txt` pour installer les packages nécessaires.
+- Tapez la commande `docker compose up -d`, cette commande va permettre de concevoir la technologie MongoDB nécessaire à la plateforme.
+- Une fois la commande tapée, démarrer le fichier principal en tapant la commande `python main.py`, une addresse locale va s'ouvrir dans le terminal, il ne reste plus qu"à se rendre  sur cette adresse pour accéder à la plateforme. 
 
 
 ## Fonctionnement de l'application Web
@@ -114,6 +112,8 @@ Après avoir énumérer les étapes et fichiers nécessaires à l'initialisation
 - main.py
 - insert_db.py
 - data_scrap.py
+- data_s/
+  + nos fichiers JSON
 - scrapy.cfg (le fichier permettant le scrapping dans ce dossier)
 - File_crawler/
   + Spiders/ (les fichiers qui vous crawler nos pages de données)
@@ -131,11 +131,64 @@ Après avoir énumérer les étapes et fichiers nécessaires à l'initialisation
 Dans la partie `main` de notre projet `main.py`, on peut voir deux fonctions appelées au préalable : `scrap()` et `insert_db()`, ces deux fonctions venant des fichiers de `data_scrap.py` pour le scrapping de nos pages et `insert_db.py` pour l'insertion des données dans la base de données MongoDB pour le traitement des informations.
 \
 Nous allons donc ici utiliser deux technologies: `Scrappy` et `Mongo`, le tout visualisé sur une application `Flask`.
-\
+
+
 ## First Step: Extraction des données
 \
 Analysons le fichier `data_scrap.py`. Le début du fichier va tout d'abord les fichiers apparents à la plateforme pour renouveler les données en temps réel en gérant les exceptions des fichiers.
 Puis ce fichier va éxécuter des commandes de `scrapy crawl` des fichiers spiders présents dans le dossier `File_crawler`. 
+Analysons la structure de ces fichiers, notamment pour le site officiel `formula1.com`. On va tout d'abord définir l'URL de départ, ainsi que le domaine de navigation autorisé, donc tout le site. L'ordre de direction est la suivante:
+  - Année de recherche voulue
+  - Types de valeurs voulues, ici les données de courses
+  - Et quel Grand Prix à étudier
+
+On définit donc les années de 2021 à 2012 (donc décroissante) à étudier et on parcourt après les données de chaque Grand Prix stockées dans des tableaux. 
+Ces informations seront stockées sous forme de `scrapy Item` qui seront retournées dans un dictionnaire de valeurs.
+
+On définit ensuite le dossier vers lequel nous allond extraire les données en format `JSON` pour le traitement de la seconde partie.
+
+
+
+## Second Step: Traitement et Insertion des données
+\
+Une fois les données JSON stockées dans notre dossier `data_s`, nous allons les initialiser sous forme de `DataFrames` dans le fichier `insert_db.py` pour le traitement et `merge` certains d'entre eux.
+
+On va notamment gérer certaines exceptions qui se sont passées durant les années 2021, comme l'annulation du Grand Prix de Belgique et donc un problème initial de conversion des données. 
+
+De plus en 2021 a été l'inauguration des courses `Sprint`, ce qui nous a donc obligé à faire des fichiers crawler spécifique pour l'année 2021.
+
+Une fois les fichier enregistrés dans des DataFrames, nous allons tirer les données en renommant les colonnes et valeurs de manière commune, ainsi que changer le format de certaines variables pour pouvoir les moduler plus tard.
+
+Une fois le traitement fini, nous allons les `insérer` dans notre database MongoDB à traver plusieurs collections qui nous serviront à faire nos requêtes. On supprimera au préalable les collections du même nom pour s'assurer de la non-duplication des données. 
+
+
+## Third Step: Exploitation et affichage des données
+\
+Nous allons exploiter maintenant notre application à travers le package Flask, un environnement permettant d'avoir plusieurs affichages dynamiquement, contrairement à la technique Dash. 
+
+On va donc pour cela utiliser la methode `render templates` permettant de modifier à travers le fichier principal les templates en html et les données qu'elles retournent. 
+
+On définit pour cela 4 addresses initiales: 
+  - la branche initial ('/') qui va générer notre page de bienvenue `hello.html`
+  - la branche drivers ('/drivers/"name"') qui affichera les données des pilotes
+  - la branche team ('/teams/"name"') celle des équipes
+  - la branche grand_prix ('/gps/"name"') celle des Grand Prix
+
+On a donc assimilé à chacun des 3 boutons la redirection vers l'une de ces racines.
+
+Maintenant que nous avons défini les redirections, attaquons-nous aux contenus des différents affichages. 
+En fonction du paramètre voulu, nous allons utiliser ce paramètre dans l'attribut `$match` des requêtes MongoDB, et retirer les informations parallèles que nous désirons.
+
+Pour certaines de ces requêtes, nous en avons extrait certaines sous forme de dataframe pour pouvoir faire des représentations graphiques, notamment pour le nombre du pilote et des équipes par saison, et une représentation en `piechart` du type de pneu utilisé le plus fréquent dans un Grand Prix.
+
+Après avoir exploité nos requêtes, il faut maintenant les afficher. L'atout de la technologie Flask est de pouvoir concevoir plusieurs templates en fonction des pages que l'on veut. 
+On a pu donc créé plusieurs pages pour cette plateforme et les personnaliser à l'aide d'un fichier css qui nous permet de `customiser` des fonctionnalités de pages comme créer de colonnes de pages ou des lignes complètes, ainsi que les boutons intéractifs que nous avons fait. 
+
+
+
+
+
+
 
 
 

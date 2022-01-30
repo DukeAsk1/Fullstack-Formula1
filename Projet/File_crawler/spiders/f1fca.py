@@ -17,6 +17,10 @@ class F1Spider(scrapy.Spider):
                   "https://www.f1cfa.com/f1-tyres-statistics.asp?t=2021&gpn=All&tipo=All&driver=All"]
    
 
+    # def parse():
+    # retourne tous les types de pneus de chaque grand prix et de chaque pilote 
+
+
     def parse(self, response):
         title = response.css('#centraralgo h1::text').extract_first()
         for article in response.css('#circuitos').css("tr")[1:]:
@@ -38,19 +42,3 @@ class F1Spider(scrapy.Spider):
         if string:
             return " ".join(string.split())
 
-"""  
-yield {
-            "title":title,
-            "all_links":all_links
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        """
