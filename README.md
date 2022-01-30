@@ -51,13 +51,13 @@ Finalement, tapez la commande `git pull` et vous aurez à votre disposition tous
 \
 Une fois la source de notre projet extraite, allez dans le dossier `Projet` et là se trouveront plusieurs fichiers dont les plus essentiels sont les suivants:
 
-- Le fichier [`main.py`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/blob/master/main.py) qui est le coeur de notre plateforme, permettant à la fois la gestion des données, à savoir le scrapping et le traitement des données, mais également la redirection vers les pages correspondantes aux appels d'actions de l'utilisateur.
-- Le dossier [`File_crawler`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/tree/master/Data_Projet) contenant les fichiers [`spiders`](https://www.kaggle.com/mylesoneill/world-university-rankings?=select=timesData.csv), fichiers prenant les informations sur les pages en ligne.
-- Le fichier [`requirement.txt`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/blob/master/requirements.txt) contenant tous les packages nécessaires au bon fonctionnement de notre plateforme.
-- Le fichier [`data_scrap.py`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/blob/master/get_data.py) permettant de lancer le crawling des informations des deux sites webs
-- Le fichier [`insert_db.py`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/blob/master/kaggle.json), permettant de faire le tri de données et l'insertion dans la base de données MongoDB à l'aide des fichiers jsons qui ont été crawlés.
-- Le dossier [`templates`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/tree/master/assets) concernant les différentes pages de notre plateforme.
-- Le dossier [`static`](https://git.esiee.fr/duongh/python-pour-la-data-science/-/tree/master/assets) concernant les différentes images et fonctionnalités de structure de notre plateforme.
+- Le fichier [`main.py`](https://git.esiee.fr/duongh/data-engineering-1/-/blob/master/Projet/main.py) qui est le coeur de notre plateforme, permettant à la fois la gestion des données, à savoir le scrapping et le traitement des données, mais également la redirection vers les pages correspondantes aux appels d'actions de l'utilisateur.
+- Le dossier [`File_crawler`](https://git.esiee.fr/duongh/data-engineering-1/-/tree/master/Projet/File_crawler) contenant les fichiers [`spiders`](https://www.kaggle.com/mylesoneill/world-university-rankings?=select=timesData.csv), fichiers prenant les informations sur les pages en ligne.
+- Le fichier [`requirement.txt`](https://git.esiee.fr/duongh/data-engineering-1/-/blob/master/Projet/requirements.txt) contenant tous les packages nécessaires au bon fonctionnement de notre plateforme.
+- Le fichier [`data_scrap.py`](https://git.esiee.fr/duongh/data-engineering-1/-/blob/master/Projet/data_scrap.py) permettant de lancer le crawling des informations des deux sites webs
+- Le fichier [`insert_db.py`](https://git.esiee.fr/duongh/data-engineering-1/-/blob/master/Projet/insert_db.py), permettant de faire le tri de données et l'insertion dans la base de données MongoDB à l'aide des fichiers jsons qui ont été crawlés.
+- Le dossier [`templates`](https://git.esiee.fr/duongh/data-engineering-1/-/tree/master/Projet/templates) concernant les différentes pages de notre plateforme.
+- Le dossier [`static`](https://git.esiee.fr/duongh/data-engineering-1/-/tree/master/Projet/static) concernant les différentes images et fonctionnalités de structure de notre plateforme.
 
 Tous ces composants de la structure entière tourneront donc autour d'un fichier principal: `docker-compose.yml`, appelant les différentes technologies que nous utilisons, ici `mongo` en base de données et notre fichier `main.py` comme fichier de compilation central.
 
